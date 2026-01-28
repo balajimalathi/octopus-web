@@ -1,0 +1,259 @@
+{
+  "common": {
+    "appName": "Octopus",
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "submit": "Enviar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "actions": "Acciones"
+  },
+  "nav": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "boards": "Tableros",
+    "admin": "Administrador",
+    "pricing": "Precios",
+    "features": "Características"
+  },
+  "landing": {
+    "hero": {
+      "title": "Recopila Comentarios que Importan",
+      "subtitle": "Construye mejores productos con una plataforma de comentarios que tus usuarios amarán. Organiza, prioriza y lanza características que impulsen el crecimiento.",
+      "cta": "Iniciar Prueba Gratuita",
+      "secondaryCta": "Ver Demo"
+    },
+    "features": {
+      "title": "Todo lo que Necesitas para Gestionar Comentarios",
+      "collaborative": {
+        "title": "Tableros Colaborativos",
+        "description": "Crea tableros públicos o privados donde tu equipo y usuarios pueden enviar, votar y discutir ideas."
+      },
+      "customizable": {
+        "title": "Totalmente Personalizable",
+        "description": "Adapta tu marca con temas, colores y fuentes personalizados. Añade tu propio CSS para control completo."
+      },
+      "embeddable": {
+        "title": "Widget Integrable",
+        "description": "Integra tableros de comentarios directamente en tu sitio web con un simple fragmento de JavaScript."
+      },
+      "multilingual": {
+        "title": "Soporte Multilingüe",
+        "description": "Alcanza una audiencia global con soporte para múltiples idiomas incluyendo inglés, español, francés y alemán."
+      },
+      "richText": {
+        "title": "Editor de Texto Enriquecido",
+        "description": "Formatea tus comentarios con un potente editor de texto enriquecido. Añade enlaces, listas y énfasis a tus publicaciones."
+      },
+      "attachments": {
+        "title": "Archivos Adjuntos",
+        "description": "Adjunta imágenes, documentos y otros archivos para proporcionar contexto y claridad a tus comentarios."
+      },
+      "notifications": {
+        "title": "Notificaciones por Email",
+        "description": "Mantente informado con notificaciones automáticas por email cuando los usuarios envíen comentarios o cuando se lancen características."
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "step1": {
+        "title": "Crea Tu Tablero",
+        "description": "Regístrate y crea un tablero de comentarios en segundos. Personalízalo para que coincida con tu marca."
+      },
+      "step2": {
+        "title": "Recopila Comentarios",
+        "description": "Comparte el enlace de tu tablero o intégralo en tu sitio. Los usuarios pueden enviar y votar ideas."
+      },
+      "step3": {
+        "title": "Lanza Características",
+        "description": "Marca los comentarios como lanzados y notifica automáticamente a tus usuarios. Mantenlos informados."
+      }
+    },
+    "pricing": {
+      "title": "Precios Simples y Transparentes",
+      "subtitle": "Comienza gratis por 3 meses, luego elige un plan que funcione para ti",
+      "free": {
+        "title": "Prueba Gratuita",
+        "price": "$0",
+        "period": "por 3 meses",
+        "description": "Perfecto para empezar",
+        "features": [
+          "Tableros ilimitados",
+          "Comentarios ilimitados",
+          "Notificaciones por email",
+          "Personalización básica",
+          "Soporte de la comunidad"
+        ],
+        "cta": "Iniciar Prueba Gratuita"
+      },
+      "pro": {
+        "title": "Pro",
+        "price": "$29",
+        "period": "por mes",
+        "description": "Para equipos en crecimiento",
+        "features": [
+          "Todo en Gratuito",
+          "Temas personalizados",
+          "Archivos adjuntos",
+          "Editor de texto enriquecido",
+          "Soporte prioritario",
+          "Sin marca de agua"
+        ],
+        "cta": "Comenzar"
+      },
+      "enterprise": {
+        "title": "Empresarial",
+        "price": "Personalizado",
+        "period": "contáctanos",
+        "description": "Para grandes organizaciones",
+        "features": [
+          "Todo en Pro",
+          "Dominio personalizado",
+          "SSO / SAML",
+          "Soporte dedicado",
+          "Garantía SLA",
+          "Análisis avanzados"
+        ],
+        "cta": "Contactar Ventas"
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Comenzar?",
+      "subtitle": "Únete a cientos de equipos que usan Octopus para construir mejores productos",
+      "button": "Comienza Tu Prueba Gratuita"
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "myBoards": "Mis Tableros",
+    "createBoard": "Crear Tablero",
+    "noBoardsYet": "Aún no hay tableros",
+    "noBoardsDescription": "Crea tu primer tablero para comenzar a recopilar comentarios",
+    "recentActivity": "Actividad Reciente",
+    "stats": {
+      "totalBoards": "Total de Tableros",
+      "totalPosts": "Total de Publicaciones",
+      "totalVotes": "Total de Votos",
+      "totalComments": "Total de Comentarios"
+    }
+  },
+  "board": {
+    "title": "Tablero",
+    "settings": "Configuración",
+    "embed": "Integrar",
+    "public": "Público",
+    "private": "Privado",
+    "name": "Nombre del Tablero",
+    "slug": "Slug",
+    "description": "Descripción",
+    "visibility": "Visibilidad",
+    "theme": "Tema",
+    "general": "General",
+    "customize": "Personalizar",
+    "embedCode": "Código de Integración",
+    "copyLink": "Copiar Enlace",
+    "delete": "Eliminar Tablero",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este tablero? Esta acción no se puede deshacer.",
+    "tabs": {
+      "general": "General",
+      "theme": "Tema",
+      "embed": "Integrar"
+    },
+    "theme": {
+      "preset": "Tema Predefinido",
+      "primaryColor": "Color Primario",
+      "fontFamily": "Familia de Fuente",
+      "customCss": "CSS Personalizado",
+      "preview": "Vista Previa"
+    }
+  },
+  "post": {
+    "title": "Publicación",
+    "submitFeedback": "Enviar Comentario",
+    "postTitle": "Título",
+    "postDescription": "Descripción",
+    "status": "Estado",
+    "vote": "Votar",
+    "votes": "Votos",
+    "comments": "Comentarios",
+    "comment": "Comentario",
+    "addComment": "Añadir un comentario",
+    "viewComments": "Ver Comentarios",
+    "hideComments": "Ocultar Comentarios",
+    "owner": "Propietario",
+    "sortBy": "Ordenar Por",
+    "recent": "Reciente",
+    "topVoted": "Más Votados",
+    "statuses": {
+      "open": "Abierto",
+      "in_progress": "En Progreso",
+      "planned": "Planificado",
+      "shipped": "Lanzado",
+      "closed": "Cerrado"
+    },
+    "signInToVote": "Inicia sesión para votar",
+    "signInToComment": "Inicia sesión para comentar",
+    "signInToPost": "Inicia sesión para enviar comentarios",
+    "noPostsYet": "Aún no hay comentarios",
+    "noPostsDescription": "Sé el primero en enviar comentarios"
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "platformStats": "Estadísticas de la Plataforma",
+    "totalUsers": "Total de Usuarios",
+    "totalBoards": "Total de Tableros",
+    "totalPosts": "Total de Publicaciones",
+    "publicBoards": "Tableros Públicos",
+    "recentUsers": "Usuarios Recientes",
+    "recentBoards": "Tableros Recientes",
+    "role": "Rol",
+    "users": "Usuarios",
+    "boards": "Tableros"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leído",
+    "noNotifications": "Aún no hay notificaciones",
+    "newFeedback": "Nuevo comentario enviado",
+    "newComment": "Nuevo comentario en tu comentario",
+    "statusChange": "Estado cambiado",
+    "feedbackShipped": "¡Tu comentario ha sido lanzado!"
+  },
+  "errors": {
+    "unauthorized": "Debes iniciar sesión para realizar esta acción",
+    "forbidden": "No tienes permiso para realizar esta acción",
+    "notFound": "El recurso solicitado no fue encontrado",
+    "serverError": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+    "validationError": "Por favor, verifica tu entrada e inténtalo de nuevo",
+    "boardNotFound": "Tablero no encontrado",
+    "postNotFound": "Publicación no encontrada",
+    "alreadyVoted": "Ya has votado en esta publicación"
+  },
+  "success": {
+    "boardCreated": "Tablero creado exitosamente",
+    "boardUpdated": "Tablero actualizado exitosamente",
+    "boardDeleted": "Tablero eliminado exitosamente",
+    "postCreated": "Comentario enviado exitosamente",
+    "postUpdated": "Publicación actualizada exitosamente",
+    "postDeleted": "Publicación eliminada exitosamente",
+    "commentAdded": "Comentario añadido exitosamente",
+    "commentDeleted": "Comentario eliminado exitosamente",
+    "voted": "Voto añadido",
+    "unvoted": "Voto eliminado",
+    "linkCopied": "Enlace copiado al portapapeles"
+  }
+}

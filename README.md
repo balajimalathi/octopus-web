@@ -1,36 +1,194 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐙 Octopus - Feedback Collection Platform
 
-## Getting Started
+A complete, production-ready feedback collection platform built with Next.js 16, competing with Canny, FeatureBase, and RightFeature.
 
-First, run the development server:
+## ✨ Features
 
+### 🎯 Core Features
+- **Create & Manage Boards** - Public or private feedback boards
+- **Theme Customization** - Preset themes (Default, New York) + custom colors/fonts
+- **Voting System** - Upvote feedback with atomic transaction handling
+- **Comments** - Threaded comments with owner badges
+- **Status Tracking** - Mark feedback as Open, In Progress, Planned, Shipped, or Closed
+- **Embed Widget** - Iframe-based widget for external websites
+- **Google OAuth** - Secure authentication via Better-auth
+- **Admin Dashboard** - Platform-wide stats and management
+
+### 🛡️ User Roles
+- **End User** - View, vote, comment (requires sign-in)
+- **Owner** - Create/manage boards, moderate content
+- **Super Admin** - Full platform access
+
+### 🎨 Customization
+- Shadcn preset themes
+- Custom primary colors
+- Font family selection (Sans, Serif, Mono)
+- Custom CSS support
+- Theme preview in real-time
+
+## 🚀 Quick Start
+
+See [SETUP.md](./SETUP.md) for detailed setup instructions.
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL database (Neon, Supabase, or local)
+- Google OAuth credentials
+
+### Installation
+
+1. **Clone and install dependencies:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Set up environment variables:**
+```bash
+cp .env.example .env.local
+# Edit .env.local with your credentials
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Run database migrations:**
+```bash
+pnpm db:push
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Start development server:**
+```bash
+pnpm dev
+```
 
-## Learn More
+Visit http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## 🏗️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework**: Next.js 16 (App Router)
+- **Authentication**: Better-auth with Google OAuth2
+- **Database**: PostgreSQL with Drizzle ORM
+- **UI**: Shadcn UI + Tailwind CSS 4
+- **Forms**: Zod + React Hook Form
+- **Query Params**: nuqs
+- **Deployment**: Vercel (recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+```
+octopus-web/
+├── app/
+│   ├── (marketing)/         # Landing page
+│   ├── (dashboard)/         # Owner dashboard
+│   ├── (board)/             # Public board views
+│   ├── api/                 # API routes
+│   └── embed/               # Embeddable widget
+├── components/
+│   ├── ui/                  # shadcn components
+│   ├── auth/                # Authentication
+│   ├── board/               # Board components
+│   ├── feedback/            # Post/comment components
+│   └── layout/              # Header, footer
+├── lib/
+│   ├── auth/                # Better-auth config
+│   ├── db/                  # Database schemas & queries
+│   └── validations/         # Zod schemas
+└── public/embed/            # Widget JavaScript & CSS
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+
+pnpm db:push      # Push schema changes (dev)
+pnpm db:generate  # Generate migrations
+pnpm db:migrate   # Run migrations (prod)
+pnpm db:studio    # Open Drizzle Studio
+```
+
+## 🎯 Usage
+
+### Creating a Board
+
+1. Sign in with Google
+2. Go to Dashboard → "Create Board"
+3. Fill in board details (name, description, visibility)
+4. Customize theme in Settings
+5. Share the link or embed on your website
+
+### Embedding a Board
+
+```html
+<div id="octopus-widget"></div>
+<script src="https://yourdomain.com/embed/widget.js"></script>
+<script>
+  new OctopusWidget({
+    boardId: 'your-board-id',
+    container: 'octopus-widget',
+    mode: 'iframe'
+  });
+</script>
+```
+
+### Managing Feedback
+
+- **Vote**: Click the up arrow (requires sign-in)
+- **Comment**: Expand post and add comment
+- **Moderate**: Board owners can delete posts/comments
+- **Status**: Owners can mark posts as Shipped, In Progress, etc.
+
+## 🔐 Security
+
+- CSRF protection via Better-auth
+- SQL injection prevention (Drizzle ORM)
+- XSS prevention (React auto-escaping)
+- Role-based access control
+- Secure session management
+
+## 📊 Database Schema
+
+- **Users** - Authentication and roles
+- **Boards** - Feedback boards with theme config
+- **Posts** - Feedback with status and vote count
+- **Votes** - Unique vote tracking
+- **Comments** - Threaded comments
+- **Notifications** - (Ready for email integration)
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push to GitHub
+2. Import in Vercel
+3. Add environment variables
+4. Deploy!
+
+See [SETUP.md](./SETUP.md) for detailed deployment instructions.
+
+## 📝 Environment Variables
+
+Required variables:
+- `DATABASE_URL` - PostgreSQL connection string
+- `BETTER_AUTH_SECRET` - Auth secret key
+- `GOOGLE_CLIENT_ID` - Google OAuth client ID
+- `GOOGLE_CLIENT_SECRET` - Google OAuth secret
+- `NEXT_PUBLIC_APP_URL` - Your app URL
+- `NEXT_PUBLIC_APP_NAME` - Your app name
+
+## 🔮 Future Enhancements
+
+- [ ] Email notifications (Resend integration)
+- [ ] Multilingual support (next-intl)
+- [ ] Payment integration (Dodo Payments)
+- [ ] Rich text editor
+- [ ] File attachments
+- [ ] Roadmap view
+- [ ] AI-powered features
+
+## 📄 License
+
+This is a private project. All rights reserved.
+
+---
+
+**Built with ❤️ using Next.js 16, Better-auth, and Drizzle ORM**

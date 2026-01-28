@@ -1,0 +1,58 @@
+/* Octopus Widget Styles */
+.octopus-widget {
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.octopus-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.octopus-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.octopus-posts {
+  padding: 1rem;
+}
+
+.octopus-post {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.octopus-vote-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  min-width: 48px;
+}
+
+.octopus-vote-btn:hover {
+  background: #f9fafb;
+}
+
+.octopus-post-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.octopus-post-content p {
+  margin: 0;
+  color: #6b7280;
+}
