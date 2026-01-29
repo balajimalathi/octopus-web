@@ -10,9 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useSession } from '@/lib/auth/auth-client';
-import { SignOutButton } from './sign-out-button';
 import { User, Settings, LayoutDashboard, Shield } from 'lucide-react';
 import Link from 'next/link';
+import LogoutButton from './logout-button';
 
 export function UserAvatar() {
   const { data: session, isPending } = useSession();
@@ -81,7 +81,7 @@ export function UserAvatar() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <div className="w-full">
-            <SignOutButton />
+            <LogoutButton />
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

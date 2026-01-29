@@ -13,7 +13,7 @@ export const postStatusEnum = pgEnum('post_status', [
 export const posts = pgTable('posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   boardId: uuid('board_id').notNull().references(() => boards.id, { onDelete: 'cascade' }),
-  authorId: uuid('author_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  authorId: text('author_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
   title: text('title').notNull(),
   description: text('description'),

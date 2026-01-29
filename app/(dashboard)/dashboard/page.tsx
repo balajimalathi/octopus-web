@@ -5,12 +5,15 @@ import { BoardCard } from '@/components/board/board-card';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
 
   if (!session) {
-    redirect('/?signin=true');
+    redirect('/login?redirect=/dashboard');
   }
 
   const boards = await getBoardsByOwner(session.user.id);

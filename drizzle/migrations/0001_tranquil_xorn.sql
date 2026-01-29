@@ -1,0 +1,1 @@
+ALTER TABLE "boards" ALTER COLUMN "owner_id" SET DATA TYPE text;

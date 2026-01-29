@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { UserAvatar } from '@/components/auth/user-avatar';
-import { SignInButton } from '@/components/auth/sign-in-button';
 import { useSession } from '@/lib/auth/auth-client';
 import { Button } from '@/components/ui/button';
 
@@ -10,24 +9,52 @@ export function Header() {
   const { data: session, isPending } = useSession();
 
   return (
-    <header className="border-b">
+    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold">
-          {process.env.NEXT_PUBLIC_APP_NAME || 'Octopus'}
-        </Link>
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+              O
+            </div>
+            <span className="text-xl font-bold">
+              {process.env.NEXT_PUBLIC_APP_NAME || 'Octopus'}
+            </span>
+          </Link>
 
-        <nav className="flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="#features"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Features
+            </Link>
+            <Link
+              href="#faq"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              FAQ
+            </Link>
+          </nav>
+        </div>
+
+        <nav className="flex items-center gap-4">
           {!isPending && (
             <>
               {session ? (
                 <>
                   <Link href="/dashboard">
-                    <Button variant="ghost">Dashboard</Button>
+                    <Button variant="ghost" size="sm">
+                      Dashboard
+                    </Button>
                   </Link>
                   <UserAvatar />
                 </>
               ) : (
-                <SignInButton />
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    Login
+                  </Button>
+                </Link>
               )}
             </>
           )}

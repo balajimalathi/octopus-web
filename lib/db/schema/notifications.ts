@@ -16,7 +16,7 @@ interface NotificationMetadata {
 
 export const notifications = pgTable('notifications', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
   type: notificationTypeEnum('type').notNull(),
   title: text('title').notNull(),

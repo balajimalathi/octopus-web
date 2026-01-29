@@ -5,7 +5,7 @@ import { users } from './users';
 export const comments = pgTable('comments', {
   id: uuid('id').primaryKey().defaultRandom(),
   postId: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
-  authorId: uuid('author_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  authorId: text('author_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
   content: text('content').notNull(),
   isOwnerComment: boolean('is_owner_comment').notNull().default(false),
