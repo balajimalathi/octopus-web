@@ -1,20 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PostCard } from './post-card';
+import { Crown, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Post {
   id: string;
   title: string;
   description: string | null;
   status: string;
+  type?: string;
   voteCount: number;
   commentCount: number;
   createdAt: Date;
   hasVoted: boolean;
   authorId: string;
+  author?: {
+    name: string | null;
+    email: string;
+    image: string | null;
+  };
 }
 
 interface PostListProps {
@@ -36,25 +42,44 @@ export function PostList({ posts, boardId, boardOwnerId, userId }: PostListProps
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">
-          {posts.length} {posts.length === 1 ? 'Post' : 'Posts'}
-        </h2>
-        <Tabs value={currentSort} onValueChange={handleSortChange}>
-          <TabsList>
-            <TabsTrigger value="recent">Recent</TabsTrigger>
-            <TabsTrigger value="votes">Top Voted</TabsTrigger>
-          </TabsList>
-        </Tabs>
+    <div className="space-y-4">
+      {/* Sorting Tabs */}
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => handleSortChange('votes')}
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+            currentSort === 'votes'
+              ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          )}
+        >
+          <Crown className="h-4 w-4" />
+          Top
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSortChange('recent')}
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+            currentSort === 'recent'
+              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          )}
+        >
+          <Clock className="h-4 w-4" />
+          Recent
+        </button>
       </div>
 
+      {/* Post List */}
       {posts.length === 0 ? (
-        <div className="text-center py-12 border-2 border-dashed rounded-lg">
-          <p className="text-muted-foreground">No feedback yet. Be the first to post!</p>
+        <div className="text-center py-16 border-2 border-dashed rounded-xl bg-muted/30">
+          <p className="text-muted-foreground">No feedback yet. Be the first to share your thoughts!</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {posts.map((post) => (
             <PostCard
               key={post.id}

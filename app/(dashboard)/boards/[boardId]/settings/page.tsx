@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,8 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Copy, ExternalLink } from 'lucide-react';
+import { Copy, ExternalLink, Loader2 } from 'lucide-react';
 import { BoardEmbedCode } from '@/components/board/board-embed-code';
+import { type ThemeConfig } from '@/lib/types';
 
 interface Board {
   id: string;
@@ -20,41 +21,43 @@ interface Board {
   slug: string;
   description: string | null;
   isPublic: boolean;
-  themeConfig: any;
+  themeConfig: ThemeConfig | null;
 }
 
-export default function BoardSettingsPage({ params }: { params: { boardId: string } }) {
-  const router = useRouter();
+export default function BoardSettingsPage() {
+  const params = useParams<{ boardId: string }>();
+  const boardId = params.boardId;
   const { toast } = useToast();
   const [board, setBoard] = useState<Board | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    fetchBoard();
-  }, [params.boardId]);
-
-  const fetchBoard = async () => {
+  const fetchBoard = useCallback(async () => {
     try {
-      const response = await fetch(`/api/boards/${params.boardId}`);
+      const response = await fetch(`/api/boards/${boardId}`);
       if (!response.ok) throw new Error('Failed to fetch board');
       const data = await response.json();
       setBoard(data.board);
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch board';
       toast({
         title: 'Error',
-        description: error.message,
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [boardId, toast]);
+
+  useEffect(() => {
+    fetchBoard();
+  }, [fetchBoard]);
 
   const handleUpdateBoard = async (updates: Partial<Board>) => {
     setIsSaving(true);
     try {
-      const response = await fetch(`/api/boards/${params.boardId}`, {
+      const response = await fetch(`/api/boards/${boardId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
@@ -68,10 +71,11 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
       });
 
       fetchBoard();
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update board';
       toast({
         title: 'Error',
-        description: error.message,
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -79,10 +83,10 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
     }
   };
 
-  const handleUpdateTheme = async (themeConfig: any) => {
+  const handleUpdateTheme = async (themeConfig: ThemeConfig) => {
     setIsSaving(true);
     try {
-      const response = await fetch(`/api/boards/${params.boardId}/theme`, {
+      const response = await fetch(`/api/boards/${boardId}/theme`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(themeConfig),
@@ -96,10 +100,11 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
       });
 
       fetchBoard();
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update theme';
       toast({
         title: 'Error',
-        description: error.message,
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -117,7 +122,11 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
   };
 
   if (isLoading) {
-    return <div className="container mx-auto py-8 px-4">Loading...</div>;
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   if (!board) {
@@ -134,7 +143,7 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
           <p className="text-muted-foreground mt-1">Board Settings</p>
         </div>
         <a href={boardUrl} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline">
+          <Button variant="outline" disabled={isSaving}>
             <ExternalLink className="mr-2 h-4 w-4" />
             View Board
           </Button>
@@ -152,7 +161,7 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
           <Card>
             <CardHeader>
               <CardTitle>Board Information</CardTitle>
-              <CardDescription>Update your board's basic details</CardDescription>
+              <CardDescription>Update your board&apos;s basic details</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -245,7 +254,7 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
                       ...board,
                       themeConfig: { ...board.themeConfig, primaryColor: e.target.value }
                     })}
-                    onBlur={() => handleUpdateTheme(board.themeConfig)}
+                    onBlur={() => board.themeConfig && handleUpdateTheme(board.themeConfig)}
                     className="w-20 h-10"
                   />
                   <Input
@@ -254,7 +263,7 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
                       ...board,
                       themeConfig: { ...board.themeConfig, primaryColor: e.target.value }
                     })}
-                    onBlur={() => handleUpdateTheme(board.themeConfig)}
+                    onBlur={() => board.themeConfig && handleUpdateTheme(board.themeConfig)}
                   />
                 </div>
               </div>
@@ -286,7 +295,7 @@ export default function BoardSettingsPage({ params }: { params: { boardId: strin
                     ...board,
                     themeConfig: { ...board.themeConfig, customCSS: e.target.value }
                   })}
-                  onBlur={() => handleUpdateTheme(board.themeConfig)}
+                  onBlur={() => board.themeConfig && handleUpdateTheme(board.themeConfig)}
                   rows={6}
                   className="font-mono text-sm"
                 />

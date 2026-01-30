@@ -1,4 +1,4 @@
-import { Header } from '@/components/layout/header';
+import { MarketingHeader } from '@/components/layout/marketing-header';
 import Link from 'next/link';
 
 export default function MarketingLayout({
@@ -10,7 +10,7 @@ export default function MarketingLayout({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <MarketingHeader />
       <main className="flex-1">
         {children}
       </main>

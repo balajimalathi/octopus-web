@@ -1,14 +1,16 @@
 import 'server-only';
 
 import { db } from '@/lib/db';
-import { posts, votes, comments } from '@/lib/db/schema';
+import { posts, votes, users } from '@/lib/db/schema';
 import { eq, and, isNull, desc, sql } from 'drizzle-orm';
+import { isDuplicateKeyError } from '@/lib/utils/error-handler';
 
 export async function createPost(data: {
   boardId: string;
   authorId: string;
   title: string;
   description?: string;
+  type?: 'feature' | 'bug';
 }) {
   const [post] = await db.insert(posts).values(data).returning();
   return post;
@@ -42,6 +44,7 @@ export async function getPostsByBoard(
       title: posts.title,
       description: posts.description,
       status: posts.status,
+      type: posts.type,
       voteCount: posts.voteCount,
       commentCount: posts.commentCount,
       createdAt: posts.createdAt,
@@ -53,8 +56,14 @@ export async function getPostsByBoard(
             AND ${votes.userId} = ${userId}
           )`
         : sql<boolean>`false`,
+      author: {
+        name: users.name,
+        email: users.email,
+        image: users.image,
+      },
     })
     .from(posts)
+    .leftJoin(users, eq(posts.authorId, users.id))
     .where(and(
       eq(posts.boardId, boardId),
       isNull(posts.deletedAt)
@@ -112,9 +121,9 @@ export async function votePost(postId: string, userId: string) {
       .where(eq(posts.id, postId));
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     // Handle unique constraint violation (user already voted)
-    if (error.code === '23505') {
+    if (isDuplicateKeyError(error)) {
       throw new Error('You have already voted on this post');
     }
     throw error;

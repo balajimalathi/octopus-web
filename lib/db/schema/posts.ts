@@ -10,6 +10,11 @@ export const postStatusEnum = pgEnum('post_status', [
   'closed'
 ]);
 
+export const postTypeEnum = pgEnum('post_type', [
+  'feature',
+  'bug'
+]);
+
 export const posts = pgTable('posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   boardId: uuid('board_id').notNull().references(() => boards.id, { onDelete: 'cascade' }),
@@ -17,6 +22,7 @@ export const posts = pgTable('posts', {
 
   title: text('title').notNull(),
   description: text('description'),
+  type: postTypeEnum('type').notNull().default('feature'),
   status: postStatusEnum('status').notNull().default('open'),
 
   voteCount: integer('vote_count').notNull().default(0),

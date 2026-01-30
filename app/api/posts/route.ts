@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'boardId is required' }, { status: 400 });
     }
 
-    const session = await auth.api.getSession({ headers: request.headers });
+    const session = await auth.api.getSession({headers: await headers()});
     const userId = session?.user.id;
 
     const posts = await getPostsByBoard(boardId, {
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

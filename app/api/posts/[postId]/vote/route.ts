@@ -4,22 +4,24 @@ import { votePost, unvotePost } from '@/lib/db/queries/posts';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { postId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await votePost(params.postId, session.user.id);
+    await votePost(postId, session.user.id);
 
     return NextResponse.json({ message: 'Vote recorded successfully' });
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to vote';
     console.error('Error voting on post:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to vote' },
+      { error: errorMessage },
       { status: 400 }
     );
   }
@@ -27,16 +29,17 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { postId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await unvotePost(params.postId, session.user.id);
+    await unvotePost(postId, session.user.id);
 
     return NextResponse.json({ message: 'Vote removed successfully' });
   } catch (error) {

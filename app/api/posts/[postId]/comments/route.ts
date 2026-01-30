@@ -8,10 +8,11 @@ import { notifyOwnerComment } from '@/lib/db/queries/notifications';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const comments = await getCommentsByPost(params.postId);
+    const { postId } = await params;
+    const comments = await getCommentsByPost(postId);
     return NextResponse.json({ comments });
   } catch (error) {
     console.error('Error fetching comments:', error);
@@ -24,10 +25,11 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { postId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -36,7 +38,7 @@ export async function POST(
     const body = await request.json();
     const validation = createCommentSchema.safeParse({
       ...body,
-      postId: params.postId,
+      postId,
     });
 
     if (!validation.success) {
@@ -47,7 +49,7 @@ export async function POST(
     }
 
     // Check if user is the board owner to set isOwnerComment flag
-    const post = await getPostById(params.postId);
+    const post = await getPostById(postId);
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
@@ -56,7 +58,7 @@ export async function POST(
     const isOwnerComment = board?.ownerId === session.user.id;
 
     const comment = await createComment({
-      postId: params.postId,
+      postId,
       authorId: session.user.id,
       content: validation.data.content,
       isOwnerComment,
@@ -66,7 +68,7 @@ export async function POST(
     if (isOwnerComment && board) {
       try {
         await notifyOwnerComment({
-          postId: params.postId,
+          postId,
           commentId: comment.id,
           boardId: board.id,
         });

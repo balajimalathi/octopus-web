@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { boards } from '@/lib/db/schema/boards';
 import { eq, and, isNull } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
+import { type ThemeConfig } from '@/lib/types';
 
 export async function createBoard(data: {
   ownerId: string;
@@ -79,7 +80,7 @@ export async function updateBoard(
   return updatedBoard;
 }
 
-export async function updateBoardTheme(boardId: string, themeConfig: any) {
+export async function updateBoardTheme(boardId: string, themeConfig: ThemeConfig) {
   const [updatedBoard] = await db
     .update(boards)
     .set({

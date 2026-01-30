@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { Users as UsersIcon, LayoutGrid, MessageSquare, Globe } from 'lucide-react';
 
 export default async function AdminPage() {
-  const session = await auth.api.getSession();
+  const session = await auth.api.getSession({headers: await headers()});
 
   if (!session || !['admin', 'super_admin'].includes(session.user.role as string)) {
     redirect('/dashboard');

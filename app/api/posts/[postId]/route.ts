@@ -7,10 +7,11 @@ import { notifyFeedbackShipped } from '@/lib/db/queries/notifications';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const post = await getPostById(params.postId);
+    const { postId } = await params;
+    const post = await getPostById(postId);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -28,16 +29,17 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { postId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const post = await getPostById(params.postId);
+    const post = await getPostById(postId);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -59,13 +61,13 @@ export async function PATCH(
       );
     }
 
-    const updatedPost = await updatePost(params.postId, validation.data);
+    const updatedPost = await updatePost(postId, validation.data);
 
     // Send notification if status changed to "shipped"
     if (validation.data.status === 'shipped' && post.status !== 'shipped') {
       try {
         await notifyFeedbackShipped({
-          postId: params.postId,
+          postId,
           boardId: post.boardId,
         });
       } catch (notificationError) {
@@ -86,16 +88,17 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { postId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const post = await getPostById(params.postId);
+    const post = await getPostById(postId);
 
     if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -107,7 +110,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    await deletePost(params.postId);
+    await deletePost(postId);
 
     return NextResponse.json({ message: 'Post deleted successfully' });
   } catch (error) {

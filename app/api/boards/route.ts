@@ -5,7 +5,7 @@ import { createBoardSchema } from '@/lib/validations/board';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

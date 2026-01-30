@@ -5,17 +5,18 @@ import { updateBoardThemeSchema } from '@/lib/validations/board';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { boardId: string } }
+  { params }: { params: Promise<{ boardId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { boardId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check ownership
-    const isOwner = await checkBoardOwnership(params.boardId, session.user.id);
+    const isOwner = await checkBoardOwnership(boardId, session.user.id);
     if (!isOwner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -30,7 +31,7 @@ export async function PATCH(
       );
     }
 
-    const updatedBoard = await updateBoardTheme(params.boardId, validation.data);
+    const updatedBoard = await updateBoardTheme(boardId, validation.data);
 
     return NextResponse.json({ board: updatedBoard });
   } catch (error) {

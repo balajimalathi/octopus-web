@@ -10,10 +10,11 @@ import { updateBoardSchema } from '@/lib/validations/board';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { boardId: string } }
+  { params }: { params: Promise<{ boardId: string }> }
 ) {
   try {
-    const board = await getBoardById(params.boardId);
+    const { boardId } = await params;
+    const board = await getBoardById(boardId);
 
     if (!board) {
       return NextResponse.json({ error: 'Board not found' }, { status: 404 });
@@ -21,7 +22,7 @@ export async function GET(
 
     // Check if board is public or if user is the owner
     if (!board.isPublic) {
-      const session = await auth.api.getSession({ headers: request.headers });
+      const session = await auth.api.getSession({headers: await headers()});
 
       if (!session || session.user.id !== board.ownerId) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -40,17 +41,18 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { boardId: string } }
+  { params }: { params: Promise<{ boardId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { boardId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check ownership
-    const isOwner = await checkBoardOwnership(params.boardId, session.user.id);
+    const isOwner = await checkBoardOwnership(boardId, session.user.id);
     if (!isOwner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -65,7 +67,7 @@ export async function PATCH(
       );
     }
 
-    const updatedBoard = await updateBoard(params.boardId, validation.data);
+    const updatedBoard = await updateBoard(boardId, validation.data);
 
     return NextResponse.json({ board: updatedBoard });
   } catch (error) {
@@ -79,22 +81,23 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { boardId: string } }
+  { params }: { params: Promise<{ boardId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { boardId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check ownership
-    const isOwner = await checkBoardOwnership(params.boardId, session.user.id);
+    const isOwner = await checkBoardOwnership(boardId, session.user.id);
     if (!isOwner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    await deleteBoard(params.boardId);
+    await deleteBoard(boardId);
 
     return NextResponse.json({ message: 'Board deleted successfully' });
   } catch (error) {

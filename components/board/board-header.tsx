@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { type ThemeConfig } from '@/lib/types';
 
 interface BoardHeaderProps {
   board: {
     name: string;
     description: string | null;
-    themeConfig: any;
+    themeConfig: ThemeConfig | null;
   };
 }
 
 export function BoardHeader({ board }: BoardHeaderProps) {
-  const themeConfig = board.themeConfig as any;
+  const themeConfig = board.themeConfig;
   const primaryColor = themeConfig?.primaryColor || '#000000';
 
   return (

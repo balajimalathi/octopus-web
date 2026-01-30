@@ -7,10 +7,11 @@ import { eq } from 'drizzle-orm';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { commentId: string } }
+  { params }: { params: Promise<{ commentId: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const { commentId } = await params;
+    const session = await auth.api.getSession({headers: await headers()});
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,7 +21,7 @@ export async function DELETE(
     const [comment] = await db
       .select()
       .from(comments)
-      .where(eq(comments.id, params.commentId));
+      .where(eq(comments.id, commentId));
 
     if (!comment) {
       return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
@@ -46,7 +47,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    await deleteComment(params.commentId);
+    await deleteComment(commentId);
 
     return NextResponse.json({ message: 'Comment deleted successfully' });
   } catch (error) {

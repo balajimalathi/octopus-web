@@ -15,6 +15,13 @@
       "when": 1769693389547,
       "tag": "0001_tranquil_xorn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769765932607,
+      "tag": "0002_overrated_ravenous",
+      "breakpoints": true
     }
   ]
 }

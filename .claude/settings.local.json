@@ -4,7 +4,13 @@
       "Bash(tree:*)",
       "Bash(pnpm add:*)",
       "Bash(pnpm dlx shadcn@latest add:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(find:*)",
+      "Bash(pnpm drizzle-kit:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(npx tsx:*)",
+      "Bash(pnpm tsx:*)",
+      "Bash(node --import tsx scripts/add-post-type.ts:*)"
     ]
   }
 }

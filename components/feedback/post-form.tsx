@@ -5,18 +5,22 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { Lightbulb, Bug } from 'lucide-react';
 
 interface PostFormProps {
   boardId: string;
   isAuthenticated: boolean;
 }
 
+type FeedbackType = 'feature' | 'bug';
+
 export function PostForm({ boardId, isAuthenticated }: PostFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>('feature');
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -26,7 +30,7 @@ export function PostForm({ boardId, isAuthenticated }: PostFormProps) {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      window.location.href = '/?signin=true';
+      router.push('/?signin=true');
       return;
     }
 
@@ -39,6 +43,7 @@ export function PostForm({ boardId, isAuthenticated }: PostFormProps) {
         body: JSON.stringify({
           ...formData,
           boardId,
+          type: feedbackType,
         }),
       });
 
@@ -53,10 +58,11 @@ export function PostForm({ boardId, isAuthenticated }: PostFormProps) {
 
       setFormData({ title: '', description: '' });
       router.refresh();
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit';
       toast({
         title: 'Error',
-        description: error.message,
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -65,38 +71,80 @@ export function PostForm({ boardId, isAuthenticated }: PostFormProps) {
   };
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle>Submit Feedback</CardTitle>
-        <CardDescription>
-          Share your ideas, suggestions, or report issues
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Input
-              placeholder="Title of your feedback"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-              maxLength={200}
-            />
-          </div>
-          <div>
-            <Textarea
-              placeholder="Describe your feedback in detail..."
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={4}
-              maxLength={5000}
-            />
-          </div>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : isAuthenticated ? 'Submit Feedback' : 'Sign in to Submit'}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+    <div className="bg-card rounded-xl border p-6 shadow-sm">
+      {/* Tab Buttons */}
+      <div className="flex gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => setFeedbackType('feature')}
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+            feedbackType === 'feature'
+              ? 'bg-orange-500 text-white'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          )}
+        >
+          <Lightbulb className="h-4 w-4" />
+          Suggest Feature
+        </button>
+        <button
+          type="button"
+          onClick={() => setFeedbackType('bug')}
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+            feedbackType === 'bug'
+              ? 'bg-red-500 text-white'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          )}
+        >
+          <Bug className="h-4 w-4" />
+          Report Bug
+        </button>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Input
+            placeholder={feedbackType === 'feature' ? 'Feature title...' : 'Bug title...'}
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            required
+            maxLength={200}
+            className="bg-background"
+          />
+        </div>
+        <div>
+          <Textarea
+            placeholder={feedbackType === 'feature'
+              ? 'Describe the feature you would like to see...'
+              : 'Describe the bug and steps to reproduce...'}
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            rows={5}
+            maxLength={5000}
+            className="bg-background resize-none"
+          />
+        </div>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={cn(
+            'w-full',
+            feedbackType === 'feature'
+              ? 'bg-orange-500 hover:bg-orange-600'
+              : 'bg-red-500 hover:bg-red-600'
+          )}
+        >
+          {isSubmitting
+            ? 'Submitting...'
+            : isAuthenticated
+              ? feedbackType === 'feature'
+                ? 'Submit Feature Request'
+                : 'Submit Bug Report'
+              : 'Sign in to Submit'}
+        </Button>
+      </form>
+    </div>
   );
 }
